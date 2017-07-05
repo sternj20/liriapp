@@ -22,8 +22,6 @@ var client = new Twitter({
 
 var params = {screen_name: 'jessesternmusic'};
 
-
-
 //Spotify
 
 var Spotify = require('node-spotify-api');
@@ -49,13 +47,16 @@ function showTweets(){
 }
 
 function showSpotifySong(){
-
-	var songToFind = process.argv[3];
+	var songToFind; 
+	if (process.argv[3]){
+		songToFind = process.argv[3];
+	} else {
+		songToFind	= 'the sign ace of base';
+	}
 	var spotify = new Spotify({
 		id: spotifyClientId,
 		secret: spotifyClientSecret
 	});
-
 
 	spotify.search({ type: 'track', query: songToFind}, function(err, data) {
 		if (err) {
@@ -68,13 +69,42 @@ function showSpotifySong(){
 	});
 }
 
+//OMDB
+
+function showMovieInfo(){
+	var movieName = process.argv[3];
+	var movieNameArr = []
+	if(process.argv.length >= 4){
+		for (var i = 3; i < process.argv.length; i++){
+			movieNameArr.push(process.argv[i]);
+		}
+		movieName = movieNameArr.join('+');
+	}
+	else {
+		movieName = 'Mr+Nobody'
+	}
+	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+	var request = require('request');
+	request(queryUrl, function (error, response, body){
+		if(!error && response.statusCode === 200){
+			var data = JSON.parse(body);
+			console.log(data.Title);
+			console.log(data.Year);
+			console.log(data.Ratings[0].Value);
+			console.log(data.Country);
+			console.log(data.Language);
+			console.log(data.Plot);
+			console.log(data.Actors);
+		}
+	});
+}
 
 if(command === 'my-tweets'){
 	showTweets();
 } else if (command === 'spotify-this-song'){
 	showSpotifySong();
 } else if (command === 'movie-this'){
-
+	showMovieInfo();
 } else if (command === 'do-what-it-says'){
 
 }
