@@ -73,7 +73,7 @@ function showSpotifySong(){
 
 function showMovieInfo(){
 	var movieName = process.argv[3];
-	var movieNameArr = []
+	var movieNameArr = [];
 	if(process.argv.length >= 4){
 		for (var i = 3; i < process.argv.length; i++){
 			movieNameArr.push(process.argv[i]);
@@ -81,7 +81,7 @@ function showMovieInfo(){
 		movieName = movieNameArr.join('+');
 	}
 	else {
-		movieName = 'Mr+Nobody'
+		movieName = 'Mr+Nobody';
 	}
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
 	var request = require('request');
