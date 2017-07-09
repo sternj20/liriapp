@@ -34,7 +34,7 @@ var spotifyClientSecret = keys.spotifyKeys.client_secret;
 function showTweets(){
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 		if (!error) {
-			tweets.forEach(function(element, index) {
+			tweets.forEach((element, index) =>{
 				index = index + 1;
 				if (index <= 20){
 					console.log(index);
@@ -46,9 +46,11 @@ function showTweets(){
 	});
 }
 
-function showSpotifySong(){
-	var songToFind; 
-	if (process.argv[3]){
+function showSpotifySong(song){
+	var songToFind;
+	if(song){
+		songToFind = song;
+	} else if (process.argv[3]){
 		songToFind = process.argv[3];
 	} else {
 		songToFind	= 'the sign ace of base';
@@ -99,6 +101,18 @@ function showMovieInfo(){
 	});
 }
 
+var fs = require("fs");
+
+function doWhatItSays(){
+	fs.readFile("random.txt", "utf8", function(error, data){
+		if(error){
+			return console.log(error);
+		}
+		var dataArr = data.split(',');
+		showSpotifySong(dataArr[1]);
+	});
+}
+
 if(command === 'my-tweets'){
 	showTweets();
 } else if (command === 'spotify-this-song'){
@@ -106,5 +120,6 @@ if(command === 'my-tweets'){
 } else if (command === 'movie-this'){
 	showMovieInfo();
 } else if (command === 'do-what-it-says'){
-
+	doWhatItSays();
 }
+
